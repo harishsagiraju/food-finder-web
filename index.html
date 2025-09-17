@@ -1,45 +1,71 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Sentiment Analyzer</title>
-    <link rel="stylesheet" href="/static/style.css" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Food Finder – Best Dishes Near You</title>
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-    <main class="container">
-        <h1>Sentiment Analyzer</h1>
-        <p class="subtitle">VADER-based sentiment analysis (runs on Windows)</p>
+  <header class="container">
+    <h1>Food Finder</h1>
+    <p>Discover the best dishes near you, dish-wise.</p>
+  </header>
 
-        {% if error %}
-        <div class="alert error">{{ error }}</div>
-        {% endif %}
+  <main class="container">
+    <section class="location">
+      <div class="row">
+        <input id="pincode" type="text" placeholder="Enter 6-digit PIN code (optional)" maxlength="6" pattern="[0-9]{6}" />
+        <button id="useLocation">Use My Location</button>
+      </div>
+      <small id="locationStatus">Enter your PIN code or click "Use My Location" to find nearby restaurants</small>
+    </section>
 
-        <form action="/analyze" method="post" class="card">
-            <label for="text">Enter text</label>
-            <textarea id="text" name="text" rows="6" placeholder="Type something to analyze...">{{ text or '' }}</textarea>
-            <button type="submit">Analyze</button>
-        </form>
+    <section class="search">
+      <div class="row">
+        <input id="query" type="text" placeholder="Search for a dish e.g., biryani, pizza, dosa" />
+        <button id="searchBtn">Search</button>
+      </div>
+      <div class="filters">
+        <label><input type="checkbox" id="veg" /> Vegetarian</label>
+        <label><input type="checkbox" id="nonVeg" /> Non-veg</label>
+        <label><input type="checkbox" id="spicy" /> Spicy</label>
+        <label>Max price ₹ <input type="number" id="maxPrice" min="0" step="10" style="width:100px" /></label>
+      </div>
+    </section>
 
-        {% if scores %}
-        <section class="results card">
-            <h2>Result: <span class="label {{ label }}">{{ label|capitalize }}</span></h2>
-            <div class="scores">
-                <div><strong>compound</strong>: {{ '%.4f'|format(scores.compound) }}</div>
-                <div><strong>pos</strong>: {{ '%.4f'|format(scores.pos) }}</div>
-                <div><strong>neu</strong>: {{ '%.4f'|format(scores.neu) }}</div>
-                <div><strong>neg</strong>: {{ '%.4f'|format(scores.neg) }}</div>
-            </div>
-        </section>
-        {% endif %}
+    <section class="trending">
+      <h2>Trending Dishes</h2>
+      <div id="trending" class="chips"></div>
+    </section>
 
-        <section class="api card">
-            <h2>API</h2>
-            <p>POST JSON to <code>/api/sentiment</code>:</p>
-            <pre>{"text": "I love this product!"}</pre>
-        </section>
-    </main>
+    <section class="results">
+      <h2>Top Results</h2>
+      <div id="results" class="cards"></div>
+    </section>
+  </main>
+
+  <template id="cardTpl">
+    <div class="card">
+      <div class="card-header">
+        <div class="dish-name"></div>
+        <div class="rating"></div>
+      </div>
+      <div class="card-body">
+        <div class="restaurant-name"></div>
+        <div class="meta"></div>
+      </div>
+      <div class="card-footer">
+        <input type="number" min="1" max="5" placeholder="Rate 1-5" class="rate-input" />
+        <input type="text" placeholder="Write a short review" class="review-input" />
+        <button class="rate-btn">Submit</button>
+      </div>
+    </div>
+  </template>
+
+  <script src="script.js"></script>
 </body>
+<!-- more content may be loaded by script.js -->
 </html>
 
 
