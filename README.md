@@ -1,51 +1,40 @@
-# Sentiment Analyzer (Windows-friendly)
+# Sentiment Analysis (Java Spring Boot)
 
-VADER sentiment analysis web app with Flask. Includes a browser UI and a JSON API.
+Simple rule-based sentiment analysis web app using Java and Spring Boot. No external ML modules required.
 
-## Setup (Windows PowerShell)
+## Prerequisites
+
+- Java 17 (or newer) installed and on PATH (check with `java -version`).
+- Maven installed (check with `mvn -v`). If you don't have Maven, you can use the Maven Wrapper once the project is built locally, but installing Maven is easiest on Windows.
+
+## Run (Windows PowerShell)
 
 ```powershell
-cd "$PSScriptRoot"  # ensure you're in the project folder
-py -m venv .venv
-.\.venv\Scripts\Activate.ps1
-py -m pip install --upgrade pip
-py -m pip install -r requirements.txt
+mvn spring-boot:run
 ```
 
-The first run downloads the VADER lexicon automatically.
+Then open `http://localhost:8080` in your browser.
 
-## Run (development)
+## Build Jar
 
 ```powershell
-py app.py
+mvn clean package
 ```
 
-Open `http://127.0.0.1:5000` in your browser.
-
-## Run (production, Windows)
+Run the jar:
 
 ```powershell
-py -m pip install waitress
-py -m waitress --host=0.0.0.0 --port=5000 app:app
+java -jar target/sentiment-analysis-0.0.1-SNAPSHOT.jar
 ```
 
 ## API
 
-POST `http://127.0.0.1:5000/api/sentiment`
+- POST `/api/analyze`
+  - Request JSON: `{ "text": "I love this product, it's amazing!" }`
+  - Response JSON: `{ "label": "positive", "score": 2, "positiveCount": 2, "negativeCount": 0 }`
 
-```json
-{"text": "I love this product!"}
-```
+## Notes
 
-Response:
-
-```json
-{
-  "label": "positive",
-  "scores": {"neg": 0.0, "neu": 0.341, "pos": 0.659, "compound": 0.8481}
-}
-```
-
-
+This uses a small keyword list for positive/negative words. You can expand the word lists in `SentimentService`.
 
 
