@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Sentiment Analyzer</title>
+    <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+    <main class="container">
+        <h1>Sentiment Analyzer</h1>
+        <p class="subtitle">VADER-based sentiment analysis (runs on Windows)</p>
+
+        {% if error %}
+        <div class="alert error">{{ error }}</div>
+        {% endif %}
+
+        <form action="/analyze" method="post" class="card">
+            <label for="text">Enter text</label>
+            <textarea id="text" name="text" rows="6" placeholder="Type something to analyze...">{{ text or '' }}</textarea>
+            <button type="submit">Analyze</button>
+        </form>
+
+        {% if scores %}
+        <section class="results card">
+            <h2>Result: <span class="label {{ label }}">{{ label|capitalize }}</span></h2>
+            <div class="scores">
+                <div><strong>compound</strong>: {{ '%.4f'|format(scores.compound) }}</div>
+                <div><strong>pos</strong>: {{ '%.4f'|format(scores.pos) }}</div>
+                <div><strong>neu</strong>: {{ '%.4f'|format(scores.neu) }}</div>
+                <div><strong>neg</strong>: {{ '%.4f'|format(scores.neg) }}</div>
+            </div>
+        </section>
+        {% endif %}
+
+        <section class="api card">
+            <h2>API</h2>
+            <p>POST JSON to <code>/api/sentiment</code>:</p>
+            <pre>{"text": "I love this product!"}</pre>
+        </section>
+    </main>
+</body>
+</html>
+
+
